@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Guess the number</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div class="box">
+            <h1>GUESS THE NUMBER</h1>
+            <h3>Pick a number between 1 and 10</h3>
+            <div class="game-body">
+                <input type="number" placeholder="Enter the number here..." id="guess"><br>
+                <input type="submit" id="submitGuess" value="Check">
+            </div>
+            <div class="top">
+                <h2>hints</h2>
+            </div>
+            <div class="hints">
+                <div class="greater">
+                    <h4>Greater than</h4>
+                    <ul id="big"></ul>
+                </div>
+                <div class="lesser">
+                    <h4>Lesser than</h4>
+                    <ul id="small"></ul>
+                </div>
+            </div>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>congratulations</h2>
+                    <h4>you won!!!</h4>
+                    <a href="index.html">play again</a>
+                </div>
+            </div>
+            <div id="myModal2" class="modal2">
+                <div class="modal-content2">
+                    <span class="end">&times;</span>
+                    <h2>game over</h2>
+                    <h4>you lost!!!</h4>
+                    <p class="ans"></p>
+                    <a href="index.html">play again</a>
+                </div>
+            </div>
+        </div>
+    
+        <script>
+            const randomNumber = Math.floor(Math.random() * 10) + 1;
+            console.log('Random Number', randomNumber);
+    
+            var bigList = document.getElementById('big');
+            var smallList = document.getElementById('small');
+            var guessInput = document.getElementById('guess');
+            var submitGuess = document.getElementById('submitGuess');
+            var attempts = 0;
+    
+            function checkGuess() {
+                var myGuess = parseInt(guessInput.value);
+    
+                if (myGuess < 1 || myGuess > 10) {
+                    alert('Please enter a number between 1 and 10.');
+                    guessInput.value = '';
+                    return;
+                }
+    
+                attempts++;
+    
+                if (myGuess === randomNumber) {
+                    modal.style.display = "block";
+                    disableInput();
+                } else if (attempts === 5) {
+                    modal2.style.display = "block";
+                    document.getElementsByTagName("p")[0].innerHTML= 'Out of attempts! The correct number was ' + randomNumber
+                    disableInput();
+                } else {
+                    if (myGuess > randomNumber) {
+                        addToList(smallList, myGuess);
+                    } else {
+                        addToList(bigList, myGuess);
+                    }
+                    guessInput.value = '';
+                }
+            }
+    
+            function addToList(list, value) {
+                var listItem = document.createElement('li');
+                listItem.textContent = value;
+                list.appendChild(listItem);
+            }
+    
+            function disableInput() {
+                guessInput.disabled = true;
+                submitGuess.disabled = true;
+            }
+    
+            function showResult(message) {
+                alert(message);
+            }
+    
+            submitGuess.addEventListener('click', checkGuess);
+
+            var modal = document.getElementById('myModal');
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            var modal2 = document.getElementById('myModal2');
+            var span = document.getElementsByClassName("end")[0];
+
+            span.onclick = function() {
+                modal2.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal2) {
+                    modal2.style.display = "none";
+                }
+            } 
+
+        </script>
+    </body>
+</html>
